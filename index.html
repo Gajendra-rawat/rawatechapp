@@ -4,292 +4,235 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>RawaTech</title>
-  <meta name="theme-color" content="#2d3a1e">
+  <meta name="theme-color" content="#0a1628">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="RawaTech">
   <link rel="manifest" href="manifest.json">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; overflow:hidden; }
-    body {
-      background: #2d3a1e;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{height:100%;overflow:hidden;}
+    body{background:#0a1628;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;}
+
+    #splashScreen{
+      position:fixed;inset:0;
+      background:linear-gradient(135deg,#0a1628 0%,#0d2045 50%,#0a1628 100%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:9999;transition:opacity 0.6s ease;
     }
 
-    /* Splash Screen */
-    #splashScreen {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #2d3a1e 0%, #4a6030 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease;
+    /* Animated background dots */
+    .bg-dots{position:fixed;inset:0;overflow:hidden;z-index:0;}
+    .dot{position:absolute;border-radius:50%;opacity:0.06;animation:floatDot 8s ease-in-out infinite;}
+    .dot1{width:350px;height:350px;background:#1e90ff;top:-80px;left:-80px;animation-delay:0s;}
+    .dot2{width:250px;height:250px;background:#00bfff;bottom:-60px;right:-60px;animation-delay:3s;}
+    .dot3{width:150px;height:150px;background:#4169e1;top:40%;right:10%;animation-delay:5s;}
+    @keyframes floatDot{0%,100%{transform:scale(1)}50%{transform:scale(1.2) translate(8px,-8px)}}
+
+    .splash-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px;}
+
+    /* Logo Container */
+    .logo-outer{
+      width:150px;height:150px;border-radius:50%;
+      background:linear-gradient(135deg,#0d2045,#1a3a7a);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:28px;
+      box-shadow:0 0 0 10px rgba(30,144,255,0.1),0 0 0 20px rgba(30,144,255,0.05),0 20px 60px rgba(30,144,255,0.3);
+      animation:logoPulse 3s ease-in-out infinite;
+      position:relative;
     }
-    .logo-ring {
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #3a4a22, #8ab444);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 24px;
-      box-shadow: 0 0 0 10px rgba(138,180,68,0.15), 0 0 0 20px rgba(138,180,68,0.07), 0 20px 60px rgba(0,0,0,0.4);
-      animation: pulse 2.5s ease-in-out infinite;
-      position: relative;
+    .logo-outer::before{
+      content:'';position:absolute;inset:-3px;border-radius:50%;
+      background:conic-gradient(#1e90ff,#00bfff,#4169e1,#1e90ff);
+      z-index:-1;animation:ringRot 4s linear infinite;
     }
-    .logo-ring::before {
-      content: '';
-      position: absolute; inset: -3px;
-      border-radius: 50%;
-      background: conic-gradient(#8ab444, #4a6030, #8ab444);
-      z-index: -1;
-      animation: spin 3s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 10px rgba(138,180,68,0.15), 0 0 0 20px rgba(138,180,68,0.07), 0 20px 60px rgba(0,0,0,0.4); }
-      50% { box-shadow: 0 0 0 14px rgba(138,180,68,0.2), 0 0 0 28px rgba(138,180,68,0.1), 0 30px 80px rgba(0,0,0,0.5); }
-    }
-    .logo-r {
-      font-size: 58px; font-weight: 900;
-      color: white; font-family: 'Arial Black', sans-serif;
-      line-height: 1; text-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-    .brand-name {
-      font-size: 30px; font-weight: 800;
-      letter-spacing: 3px; margin-bottom: 6px;
-      font-family: 'Arial Black', sans-serif;
-    }
-    .brand-rawa { color: white; }
-    .brand-tech { color: #8ab444; }
-    .brand-sub {
-      font-size: 11px; color: rgba(255,255,255,0.5);
-      letter-spacing: 3px; text-transform: uppercase;
-      margin-bottom: 50px;
-    }
-    .bar-wrap { width: 200px; }
-    .bar-bg {
-      width: 100%; height: 3px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px; overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .bar-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #8ab444, #b8d464);
-      border-radius: 10px;
-      transition: width 0.4s ease;
-    }
-    .bar-text {
-      text-align: center; font-size: 11px;
-      color: rgba(255,255,255,0.4); letter-spacing: 1px;
+    @keyframes ringRot{to{transform:rotate(360deg)}}
+    @keyframes logoPulse{
+      0%,100%{box-shadow:0 0 0 10px rgba(30,144,255,0.1),0 0 0 20px rgba(30,144,255,0.05),0 20px 60px rgba(30,144,255,0.3);}
+      50%{box-shadow:0 0 0 14px rgba(30,144,255,0.15),0 0 0 28px rgba(30,144,255,0.08),0 30px 80px rgba(30,144,255,0.45);}
     }
 
-    /* Main App Frame — Google banner COMPLETELY hidden */
-    #appFrame {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: none;
-      /* Ye trick Google banner ko hide karta hai */
-      clip-path: inset(0px 0px 0px 0px);
+    /* LOGO IMAGE */
+    .logo-img{
+      width:120px;height:120px;border-radius:50%;
+      object-fit:cover;
     }
+
+    /* Brand Text */
+    .brand-name{
+      font-size:28px;font-weight:900;letter-spacing:2px;
+      margin-bottom:5px;font-family:'Arial Black',sans-serif;
+    }
+    .brand-rawa{color:white;}
+    .brand-tech{color:#1e90ff;}
+    .brand-solutions{
+      display:block;font-size:10px;color:rgba(255,255,255,0.4);
+      letter-spacing:4px;text-transform:uppercase;margin-bottom:40px;
+    }
+
+    /* Loading Bar */
+    .bar-wrap{width:200px;}
+    .bar-bg{width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+    .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#1e90ff,#00bfff);border-radius:10px;transition:width 0.4s ease;}
+    .bar-text{text-align:center;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1px;}
+
+    /* App Frame */
+    #appFrame{position:fixed;inset:0;width:100%;height:100%;border:none;display:none;}
 
     /* Install Banner */
-    #installBanner {
-      display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(135deg, #2d3a1e, #4a6030);
-      color: white; padding: 14px 16px;
-      z-index: 99999;
-      animation: slideUp 0.4s ease;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    #installBanner{
+      display:none;position:fixed;bottom:0;left:0;right:0;
+      background:linear-gradient(135deg,#0d2045,#1a3a7a);
+      color:white;padding:14px 16px;z-index:99999;
+      animation:slideUp 0.4s ease;box-shadow:0 -4px 20px rgba(0,0,0,0.4);
     }
-    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    .banner-row { display:flex; align-items:center; gap:10px; max-width:500px; margin:0 auto; }
-    .banner-icon { font-size:30px; flex-shrink:0; }
-    .banner-info { flex:1; }
-    .banner-title { font-size:14px; font-weight:800; }
-    .banner-sub { font-size:11px; opacity:0.7; margin-top:2px; color:#8ab444; }
-    .banner-btn {
-      background:#8ab444; color:#1a2410;
-      border:none; padding:9px 16px;
-      border-radius:20px; font-weight:800;
-      font-size:13px; cursor:pointer; flex-shrink:0;
-    }
-    .banner-x {
-      background:rgba(255,255,255,0.15); border:none;
-      color:white; width:28px; height:28px;
-      border-radius:50%; cursor:pointer; font-size:13px;
-      flex-shrink:0;
-    }
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .bnr-row{display:flex;align-items:center;gap:10px;max-width:500px;margin:0 auto;}
+    .bnr-icon{font-size:28px;flex-shrink:0;}
+    .bnr-info{flex:1;}
+    .bnr-title{font-size:14px;font-weight:800;}
+    .bnr-sub{font-size:11px;color:#00bfff;margin-top:2px;}
+    .bnr-btn{background:#1e90ff;color:white;border:none;padding:9px 16px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;flex-shrink:0;}
+    .bnr-x{background:rgba(255,255,255,0.15);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;flex-shrink:0;}
 
     /* iOS Hint */
-    #iosHint {
-      display:none; position:fixed;
-      bottom:16px; left:12px; right:12px;
-      background:white; border-radius:14px;
-      padding:16px 16px 14px;
-      box-shadow:0 10px 40px rgba(0,0,0,0.25);
-      z-index:99999;
+    #iosHint{
+      display:none;position:fixed;bottom:16px;left:12px;right:12px;
+      background:white;border-radius:14px;padding:16px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.25);z-index:99999;
       animation:slideUp 0.4s ease;
     }
-    .ios-title { font-size:14px; font-weight:800; color:#2d3a1e; margin-bottom:10px; }
-    .ios-step { font-size:13px; color:#444; margin:6px 0; }
-    .ios-close {
-      position:absolute; top:10px; right:12px;
-      background:#f0f0f0; border:none;
-      width:26px; height:26px; border-radius:50%;
-      cursor:pointer; font-size:13px;
-    }
+    .ios-title{font-size:14px;font-weight:800;color:#0d2045;margin-bottom:10px;}
+    .ios-step{font-size:13px;color:#444;margin:5px 0;}
+    .ios-x{position:absolute;top:10px;right:12px;background:#f0f0f0;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px;}
   </style>
 </head>
 <body>
 
-<!-- SPLASH SCREEN -->
+<!-- SPLASH -->
 <div id="splashScreen">
-  <div class="logo-ring"><span class="logo-r">R</span></div>
-  <div class="brand-name">
-    <span class="brand-rawa">Rawa</span><span class="brand-tech">Tech</span>
+  <div class="bg-dots">
+    <div class="dot dot1"></div>
+    <div class="dot dot2"></div>
+    <div class="dot dot3"></div>
   </div>
-  <div class="brand-sub">Restaurant Management</div>
-  <div class="bar-wrap">
-    <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
-    <div class="bar-text" id="barText">Loading...</div>
+  <div class="splash-content">
+
+    <!-- LOGO: Aapka actual logo image -->
+    <div class="logo-outer">
+      <img
+        class="logo-img"
+        src="https://raw.githubusercontent.com/Gajendra-rawat/rawatechapp/main/logo.png"
+        onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';"
+        alt="RawaTech Logo"
+      >
+      <!-- Fallback agar logo na aaye -->
+      <div id="logoFallback" style="display:none;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#1e90ff);align-items:center;justify-content:center;font-size:56px;font-weight:900;color:white;font-family:'Arial Black',sans-serif;">R</div>
+    </div>
+
+    <div class="brand-name">
+      <span class="brand-rawa">Rawa</span><span class="brand-tech">Tech</span>
+    </div>
+    <span class="brand-solutions">— Solutions —</span>
+
+    <div class="bar-wrap">
+      <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
+      <div class="bar-text" id="barText">Initializing...</div>
+    </div>
   </div>
 </div>
 
-<!-- APP IFRAME — Google banner yahan hide ho jaega -->
+<!-- APP IFRAME -->
 <iframe
   id="appFrame"
   src=""
-  allow="camera; microphone; geolocation"
+  allow="camera;microphone;geolocation"
   sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
 ></iframe>
 
 <!-- INSTALL BANNER -->
 <div id="installBanner">
-  <div class="banner-row">
-    <div class="banner-icon">📲</div>
-    <div class="banner-info">
-      <div class="banner-title">RawaTech Install Karein</div>
-      <div class="banner-sub">Home screen pe add karein — bilkul native app!</div>
+  <div class="bnr-row">
+    <div class="bnr-icon">📲</div>
+    <div class="bnr-info">
+      <div class="bnr-title">RawaTech Install Karein</div>
+      <div class="bnr-sub">Home screen pe add karein — bilkul native app!</div>
     </div>
-    <button class="banner-btn" id="installBtn">INSTALL</button>
-    <button class="banner-x" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+    <button class="bnr-btn" id="installBtn">INSTALL</button>
+    <button class="bnr-x" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
   </div>
 </div>
 
 <!-- iOS HINT -->
 <div id="iosHint">
-  <button class="ios-close" onclick="document.getElementById('iosHint').style.display='none'">✕</button>
+  <button class="ios-x" onclick="document.getElementById('iosHint').style.display='none'">✕</button>
   <div class="ios-title">📲 iPhone Par Install Karein</div>
-  <div class="ios-step">1️⃣ Safari mein Share ⬆️ button tap karein</div>
+  <div class="ios-step">1️⃣ Safari mein Share ⬆️ tap karein</div>
   <div class="ios-step">2️⃣ "Add to Home Screen" select karein</div>
   <div class="ios-step">3️⃣ "Add" tap karein — Done! ✅</div>
 </div>
 
 <script>
-  // ✅ AAPKA GOOGLE SCRIPT URL
   var APP_URL = "https://script.google.com/macros/s/AKfycbwbRnQJVKe_dD-04eij5lwDSXuvk_cllFJZ0crpkBPiAFkWg1-YrKJ7fp0MrqwjJ9G9gg/exec";
 
-  var bar     = document.getElementById('bar');
-  var barText = document.getElementById('barText');
-  var splash  = document.getElementById('splashScreen');
-  var frame   = document.getElementById('appFrame');
+  var bar=document.getElementById('bar');
+  var barText=document.getElementById('barText');
+  var splash=document.getElementById('splashScreen');
+  var frame=document.getElementById('appFrame');
 
-  // Loading animation
-  var steps = [
-    { pct:25,  text:"Connecting...",   delay:200  },
-    { pct:55,  text:"Loading data...", delay:600  },
-    { pct:85,  text:"Almost ready...",  delay:1100 },
-    { pct:100, text:"Welcome! 🎉",     delay:1600 },
+  var steps=[
+    {pct:25,text:"Connecting...",delay:300},
+    {pct:55,text:"Loading data...",delay:700},
+    {pct:85,text:"Almost ready...",delay:1200},
+    {pct:100,text:"Welcome! 🎉",delay:1700},
   ];
   steps.forEach(function(s){
-    setTimeout(function(){
-      bar.style.width  = s.pct + '%';
-      barText.textContent = s.text;
-    }, s.delay);
+    setTimeout(function(){bar.style.width=s.pct+'%';barText.textContent=s.text;},s.delay);
   });
 
-  // Splash ke baad iframe load karo
   setTimeout(function(){
-    frame.src = APP_URL;
-    frame.style.display = 'block';
+    frame.src=APP_URL;
+    frame.style.display='block';
+    splash.style.opacity='0';
+    setTimeout(function(){splash.style.display='none';},600);
+  },2200);
 
-    // Splash fade out
-    splash.style.opacity = '0';
-    setTimeout(function(){ splash.style.display = 'none'; }, 500);
-
-    // Install banner thodi der baad
-    setTimeout(function(){
-      if(!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone){
-        var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        if(!isIos && deferredPrompt){
-          document.getElementById('installBanner').style.display = 'block';
-        }
+  setTimeout(function(){
+    var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+    if(!standalone){
+      var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+      if(!isIos&&deferredPrompt){
+        document.getElementById('installBanner').style.display='block';
       }
-    }, 3000);
+    }
+  },3500);
 
-  }, 2000);
-
-  // Android PWA Install
-  var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    deferredPrompt = e;
+  var deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();deferredPrompt=e;
   });
-  document.getElementById('installBtn').addEventListener('click', function(){
+  document.getElementById('installBtn').addEventListener('click',function(){
     if(deferredPrompt){
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then(function(){
         document.getElementById('installBanner').style.display='none';
-        deferredPrompt = null;
+        deferredPrompt=null;
       });
     }
   });
 
-  // iOS Hint
-  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-  if(isIos && !isStandalone){
-    setTimeout(function(){
-      document.getElementById('iosHint').style.display = 'block';
-    }, 2500);
+  var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches;
+  if(isIos&&!isStandalone){
+    setTimeout(function(){document.getElementById('iosHint').style.display='block';},2800);
   }
 
-  // Service Worker
   if('serviceWorker' in navigator){
-    window.addEventListener('load', function(){
+    window.addEventListener('load',function(){
       navigator.serviceWorker.register('sw.js').catch(function(){});
     });
   }
 </script>
 </body>
 </html>
-```
-
----
-
-## Ye Kaise Kaam Karega
-```
-GitHub Pages (clean URL) ✅
-        ↓
-RawaTech Splash Screen dikhe ✅
-        ↓
-Google Script IFRAME mein load ho ✅
-        ↓
-Google banner IFRAME ke andar chhupta hai ✅
-        ↓
-User ko sirf aapki app dikhe ✅
-        ↓
-Install button aaye ✅
