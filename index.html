@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RawaTech</title>
+  <meta name="theme-color" content="#0a1628">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RawaTech">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #0a1628;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+    .bg-circles { position:fixed; inset:0; z-index:0; overflow:hidden; }
+    .circle { position:absolute; border-radius:50%; opacity:0.07; animation:floatC 8s ease-in-out infinite; }
+    .c1 { width:400px; height:400px; background:#1e90ff; top:-100px; left:-100px; animation-delay:0s; }
+    .c2 { width:300px; height:300px; background:#00bfff; bottom:-80px; right:-80px; animation-delay:2s; }
+    .c3 { width:200px; height:200px; background:#4169e1; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:4s; }
+    @keyframes floatC { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15) translate(10px,-10px)} }
+    .c3 { animation-name: floatC2; }
+    @keyframes floatC2 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.2)} }
+
+    .splash-card {
+      position:relative; z-index:10;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      padding:40px 30px; text-align:center;
+      width:100%; max-width:380px;
+    }
+    .logo-ring {
+      width:130px; height:130px; border-radius:50%;
+      background:linear-gradient(135deg,#1e3a8a,#1e90ff);
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:28px;
+      box-shadow: 0 0 0 8px rgba(30,144,255,.12), 0 0 0 16px rgba(30,144,255,.06), 0 20px 60px rgba(30,144,255,.4);
+      animation:logoPulse 3s ease-in-out infinite;
+      position:relative;
+    }
+    .logo-ring::before {
+      content:''; position:absolute; inset:-3px; border-radius:50%;
+      background:linear-gradient(135deg,#1e90ff,#00bfff,#1e3a8a,#1e90ff);
+      z-index:-1; animation:ringRotate 4s linear infinite;
+    }
+    @keyframes logoPulse {
+      0%,100%{box-shadow:0 0 0 8px rgba(30,144,255,.12),0 0 0 16px rgba(30,144,255,.06),0 20px 60px rgba(30,144,255,.4)}
+      50%{box-shadow:0 0 0 12px rgba(30,144,255,.18),0 0 0 24px rgba(30,144,255,.08),0 30px 80px rgba(30,144,255,.5)}
+    }
+    @keyframes ringRotate { to{transform:rotate(360deg)} }
+    .logo-letter { font-size:62px; font-weight:900; color:white; font-family:'Arial Black',sans-serif; line-height:1; }
+    .brand-name { font-size:32px; font-weight:800; letter-spacing:3px; margin-bottom:6px; }
+    .brand-rawa { color:white; }
+    .brand-tech { color:#1e90ff; }
+    .brand-tagline { font-size:12px; color:rgba(255,255,255,.5); letter-spacing:3px; text-transform:uppercase; margin-bottom:40px; }
+    .loading-wrap { width:220px; margin-bottom:20px; }
+    .loading-bar-bg { width:100%; height:4px; background:rgba(255,255,255,.1); border-radius:10px; overflow:hidden; margin-bottom:14px; }
+    .loading-bar-fill { height:100%; width:0%; background:linear-gradient(90deg,#1e90ff,#00bfff); border-radius:10px; transition:width 0.3s ease; }
+    .loading-text { font-size:12px; color:rgba(255,255,255,.5); letter-spacing:1px; }
+    .open-btn {
+      display:none; margin-top:20px; padding:14px 40px;
+      background:linear-gradient(135deg,#1e3a8a,#1e90ff);
+      color:white; border:none; border-radius:50px;
+      font-size:16px; font-weight:700; letter-spacing:1px;
+      cursor:pointer; text-decoration:none;
+      box-shadow:0 8px 25px rgba(30,144,255,.4);
+      animation:btnPulse 2s ease-in-out infinite;
+    }
+    @keyframes btnPulse {
+      0%,100%{transform:scale(1)} 50%{transform:scale(1.03)}
+    }
+    #installBanner {
+      display:none; position:fixed; bottom:0; left:0; right:0;
+      background:linear-gradient(135deg,#1e3a8a,#1e90ff);
+      color:white; padding:14px 20px; z-index:9999;
+      animation:slideUp .4s ease;
+    }
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .banner-inner{display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;}
+    .banner-icon{font-size:32px;flex-shrink:0;}
+    .banner-text{flex:1;}
+    .banner-title{font-size:14px;font-weight:800;}
+    .banner-sub{font-size:11px;opacity:.8;margin-top:2px;}
+    .banner-install-btn{background:white;color:#1e3a8a;border:none;padding:9px 18px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;flex-shrink:0;}
+    .banner-close{background:rgba(255,255,255,.2);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;flex-shrink:0;}
+    #iosHint{
+      display:none; position:fixed; bottom:20px; left:16px; right:16px;
+      background:white; color:#333; padding:16px; border-radius:16px;
+      box-shadow:0 10px 40px rgba(0,0,0,.3); z-index:9999;
+      animation:slideUp .4s ease;
+    }
+    .ios-hint-title{font-size:14px;font-weight:800;color:#1e3a8a;margin-bottom:8px;}
+    .ios-hint-step{font-size:13px;color:#555;margin:5px 0;}
+    .ios-close{position:absolute;top:10px;right:12px;background:#f0f0f0;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;}
+    .version-badge{position:fixed;bottom:12px;right:12px;font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;}
+  </style>
+</head>
+<body>
+<div class="bg-circles">
+  <div class="circle c1"></div>
+  <div class="circle c2"></div>
+  <div class="circle c3"></div>
+</div>
+<div class="splash-card">
+  <div class="logo-ring"><span class="logo-letter">R</span></div>
+  <div class="brand-name"><span class="brand-rawa">Rawa</span><span class="brand-tech">Tech</span></div>
+  <div class="brand-tagline">Restaurant Management</div>
+  <div class="loading-wrap">
+    <div class="loading-bar-bg"><div class="loading-bar-fill" id="loadBar"></div></div>
+    <div class="loading-text" id="loadText">Initializing...</div>
+  </div>
+  <a id="openBtn" class="open-btn" href="#">🚀 OPEN APP</a>
+</div>
+
+<div id="installBanner">
+  <div class="banner-inner">
+    <div class="banner-icon">📲</div>
+    <div class="banner-text">
+      <div class="banner-title">RawaTech Install Karein</div>
+      <div class="banner-sub">Home screen pe add karein — bilkul native app!</div>
+    </div>
+    <button class="banner-install-btn" id="installBtn">INSTALL</button>
+    <button class="banner-close" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+  </div>
+</div>
+
+<div id="iosHint">
+  <button class="ios-close" onclick="document.getElementById('iosHint').style.display='none'">✕</button>
+  <div class="ios-hint-title">📲 iPhone Par Install Karein</div>
+  <div class="ios-hint-step">1️⃣ Niche Share button (⬆️) tap karein</div>
+  <div class="ios-hint-step">2️⃣ "Add to Home Screen" select karein</div>
+  <div class="ios-hint-step">3️⃣ "Add" tap karein — Done! ✅</div>
+</div>
+
+<div class="version-badge">RawaTech v2.0</div>
+
+<script>
+  // ⚠️ SIRF YE LINE CHANGE KARNI HAI — APNA GOOGLE SCRIPT URL YAHAN PASTE KARO
+  var APP_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+
+  var loadBar  = document.getElementById('loadBar');
+  var loadText = document.getElementById('loadText');
+  var openBtn  = document.getElementById('openBtn');
+
+  var steps = [
+    { pct:20,  text:"Loading RawaTech...",     delay:300  },
+    { pct:50,  text:"Connecting to server...", delay:700  },
+    { pct:80,  text:"Almost ready...",         delay:1200 },
+    { pct:100, text:"Welcome! 🎉",             delay:1700 },
+  ];
+  steps.forEach(function(s){
+    setTimeout(function(){ loadBar.style.width=s.pct+'%'; loadText.textContent=s.text; }, s.delay);
+  });
+
+  setTimeout(function(){ window.location.href = APP_URL; }, 2200);
+
+  setTimeout(function(){
+    openBtn.href = APP_URL;
+    openBtn.style.display = 'inline-block';
+    loadText.textContent = 'Tap karein app kholne ke liye';
+  }, 3500);
+
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt = e;
+    setTimeout(function(){ document.getElementById('installBanner').style.display='block'; }, 1000);
+  });
+  document.getElementById('installBtn').addEventListener('click', function(){
+    if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(function(){ document.getElementById('installBanner').style.display='none'; deferredPrompt=null; }); }
+  });
+
+  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  if(isIos && !isStandalone){ setTimeout(function(){ document.getElementById('iosHint').style.display='block'; }, 1500); }
+
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    });
+  }
+</script>
+</body>
+</html>
