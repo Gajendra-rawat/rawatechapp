@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>RawaTech</title>
-  <meta name="theme-color" content="#0a1628">
+  <meta name="theme-color" content="#2d3a1e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,224 +12,222 @@
   <link rel="manifest" href="manifest.json">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;overflow:hidden;}
-    body{background:#0a1628;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;}
+    html,body{height:100%;width:100%;overflow:hidden;}
+    body{
+      background:linear-gradient(135deg,#0a1628 0%,#0d2045 100%);
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      font-family:'Segoe UI',sans-serif;
+      min-height:100vh;
+    }
+    .bg{position:fixed;inset:0;overflow:hidden;z-index:0;}
+    .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.15;animation:blobMove 10s ease-in-out infinite;}
+    .b1{width:400px;height:400px;background:#1e90ff;top:-100px;left:-100px;animation-delay:0s;}
+    .b2{width:300px;height:300px;background:#00bfff;bottom:-80px;right:-80px;animation-delay:3s;}
+    .b3{width:200px;height:200px;background:#4169e1;top:50%;left:60%;animation-delay:6s;}
+    @keyframes blobMove{0%,100%{transform:scale(1) translate(0,0);}50%{transform:scale(1.2) translate(20px,-20px);}}
 
-    #splashScreen{
-      position:fixed;inset:0;
-      background:linear-gradient(135deg,#0a1628 0%,#0d2045 50%,#0a1628 100%);
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      z-index:9999;transition:opacity 0.6s ease;
+    .card{
+      position:relative;z-index:10;
+      display:flex;flex-direction:column;
+      align-items:center;text-align:center;
+      padding:40px 30px;
     }
 
-    /* Animated background dots */
-    .bg-dots{position:fixed;inset:0;overflow:hidden;z-index:0;}
-    .dot{position:absolute;border-radius:50%;opacity:0.06;animation:floatDot 8s ease-in-out infinite;}
-    .dot1{width:350px;height:350px;background:#1e90ff;top:-80px;left:-80px;animation-delay:0s;}
-    .dot2{width:250px;height:250px;background:#00bfff;bottom:-60px;right:-60px;animation-delay:3s;}
-    .dot3{width:150px;height:150px;background:#4169e1;top:40%;right:10%;animation-delay:5s;}
-    @keyframes floatDot{0%,100%{transform:scale(1)}50%{transform:scale(1.2) translate(8px,-8px)}}
-
-    .splash-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:30px;}
-
-    /* Logo Container */
-    .logo-outer{
-      width:150px;height:150px;border-radius:50%;
-      background:linear-gradient(135deg,#0d2045,#1a3a7a);
+    /* Logo Ring */
+    .logo-ring{
+      width:140px;height:140px;border-radius:50%;
       display:flex;align-items:center;justify-content:center;
-      margin-bottom:28px;
-      box-shadow:0 0 0 10px rgba(30,144,255,0.1),0 0 0 20px rgba(30,144,255,0.05),0 20px 60px rgba(30,144,255,0.3);
-      animation:logoPulse 3s ease-in-out infinite;
-      position:relative;
+      margin-bottom:28px;position:relative;
+      animation:ringPulse 3s ease-in-out infinite;
     }
-    .logo-outer::before{
-      content:'';position:absolute;inset:-3px;border-radius:50%;
-      background:conic-gradient(#1e90ff,#00bfff,#4169e1,#1e90ff);
-      z-index:-1;animation:ringRot 4s linear infinite;
+    .logo-ring::before{
+      content:'';position:absolute;inset:-4px;border-radius:50%;
+      background:conic-gradient(#1e90ff 0%,#00bfff 25%,#0a1628 50%,#1e90ff 75%,#00bfff 100%);
+      animation:spin 3s linear infinite;z-index:-1;
     }
-    @keyframes ringRot{to{transform:rotate(360deg)}}
-    @keyframes logoPulse{
-      0%,100%{box-shadow:0 0 0 10px rgba(30,144,255,0.1),0 0 0 20px rgba(30,144,255,0.05),0 20px 60px rgba(30,144,255,0.3);}
-      50%{box-shadow:0 0 0 14px rgba(30,144,255,0.15),0 0 0 28px rgba(30,144,255,0.08),0 30px 80px rgba(30,144,255,0.45);}
+    .logo-ring::after{
+      content:'';position:absolute;inset:-8px;border-radius:50%;
+      background:conic-gradient(rgba(30,144,255,0.3) 0%,transparent 60%);
+      animation:spin 6s linear infinite reverse;z-index:-2;
     }
-
-    /* LOGO IMAGE */
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes ringPulse{
+      0%,100%{box-shadow:0 0 30px rgba(30,144,255,0.3),0 0 60px rgba(30,144,255,0.1);}
+      50%{box-shadow:0 0 50px rgba(30,144,255,0.5),0 0 100px rgba(30,144,255,0.2);}
+    }
     .logo-img{
-      width:120px;height:120px;border-radius:50%;
-      object-fit:cover;
+      width:130px;height:130px;border-radius:50%;
+      object-fit:cover;border:3px solid rgba(255,255,255,0.1);
+    }
+    .logo-fallback{
+      width:130px;height:130px;border-radius:50%;
+      background:linear-gradient(135deg,#1e3a8a,#1e90ff);
+      display:none;align-items:center;justify-content:center;
+      font-size:60px;font-weight:900;color:white;
+      font-family:'Arial Black',sans-serif;
     }
 
-    /* Brand Text */
-    .brand-name{
-      font-size:28px;font-weight:900;letter-spacing:2px;
-      margin-bottom:5px;font-family:'Arial Black',sans-serif;
+    /* Brand */
+    .brand{font-size:30px;font-weight:900;letter-spacing:2px;margin-bottom:4px;font-family:'Arial Black',sans-serif;}
+    .rawa{color:white;}
+    .tech{color:#1e90ff;}
+    .solutions{font-size:10px;color:rgba(255,255,255,0.35);letter-spacing:5px;text-transform:uppercase;margin-bottom:44px;}
+
+    /* Progress */
+    .progress-wrap{width:220px;}
+    .progress-bg{width:100%;height:3px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+    .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#1e90ff,#00bfff,#1e90ff);background-size:200%;border-radius:10px;transition:width 0.5s ease;animation:shimmer 2s linear infinite;}
+    @keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+    .progress-text{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;}
+
+    /* Install Banner — BOTTOM */
+    #pwaBar{
+      display:none;position:fixed;
+      bottom:0;left:0;right:0;
+      background:linear-gradient(135deg,#1e3a8a,#1565c0);
+      padding:14px 16px;z-index:99999;
+      box-shadow:0 -6px 30px rgba(0,0,0,0.5);
+      animation:slideUp 0.5s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .brand-rawa{color:white;}
-    .brand-tech{color:#1e90ff;}
-    .brand-solutions{
-      display:block;font-size:10px;color:rgba(255,255,255,0.4);
-      letter-spacing:4px;text-transform:uppercase;margin-bottom:40px;
+    @keyframes slideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+    .pwa-row{display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;}
+    .pwa-icon{font-size:32px;flex-shrink:0;}
+    .pwa-info{flex:1;}
+    .pwa-title{font-size:14px;font-weight:800;color:white;letter-spacing:0.5px;}
+    .pwa-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;}
+    .pwa-install-btn{
+      background:white;color:#1e3a8a;
+      border:none;padding:10px 18px;
+      border-radius:25px;font-weight:900;
+      font-size:13px;cursor:pointer;
+      flex-shrink:0;letter-spacing:0.5px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    }
+    .pwa-close{
+      background:rgba(255,255,255,0.15);border:none;
+      color:white;width:30px;height:30px;
+      border-radius:50%;cursor:pointer;font-size:15px;
+      flex-shrink:0;display:flex;align-items:center;justify-content:center;
     }
 
-    /* Loading Bar */
-    .bar-wrap{width:200px;}
-    .bar-bg{width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin-bottom:12px;}
-    .bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#1e90ff,#00bfff);border-radius:10px;transition:width 0.4s ease;}
-    .bar-text{text-align:center;font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:1px;}
-
-    /* App Frame */
-    #appFrame{position:fixed;inset:0;width:100%;height:100%;border:none;display:none;}
-
-    /* Install Banner */
-    #installBanner{
-      display:none;position:fixed;bottom:0;left:0;right:0;
-      background:linear-gradient(135deg,#0d2045,#1a3a7a);
-      color:white;padding:14px 16px;z-index:99999;
-      animation:slideUp 0.4s ease;box-shadow:0 -4px 20px rgba(0,0,0,0.4);
-    }
-    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-    .bnr-row{display:flex;align-items:center;gap:10px;max-width:500px;margin:0 auto;}
-    .bnr-icon{font-size:28px;flex-shrink:0;}
-    .bnr-info{flex:1;}
-    .bnr-title{font-size:14px;font-weight:800;}
-    .bnr-sub{font-size:11px;color:#00bfff;margin-top:2px;}
-    .bnr-btn{background:#1e90ff;color:white;border:none;padding:9px 16px;border-radius:20px;font-weight:800;font-size:13px;cursor:pointer;flex-shrink:0;}
-    .bnr-x{background:rgba(255,255,255,0.15);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;flex-shrink:0;}
-
-    /* iOS Hint */
-    #iosHint{
+    /* iOS */
+    #iosBox{
       display:none;position:fixed;bottom:16px;left:12px;right:12px;
-      background:white;border-radius:14px;padding:16px;
-      box-shadow:0 10px 40px rgba(0,0,0,0.25);z-index:99999;
+      background:white;border-radius:16px;padding:18px 16px 14px;
+      box-shadow:0 15px 50px rgba(0,0,0,0.3);z-index:99999;
       animation:slideUp 0.4s ease;
     }
-    .ios-title{font-size:14px;font-weight:800;color:#0d2045;margin-bottom:10px;}
-    .ios-step{font-size:13px;color:#444;margin:5px 0;}
-    .ios-x{position:absolute;top:10px;right:12px;background:#f0f0f0;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px;}
+    .ios-t{font-size:15px;font-weight:800;color:#1e3a8a;margin-bottom:12px;}
+    .ios-s{font-size:13px;color:#444;margin:7px 0;display:flex;align-items:center;gap:8px;}
+    .ios-x{position:absolute;top:10px;right:12px;background:#f0f0f0;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;}
   </style>
 </head>
 <body>
+<div class="bg">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
 
-<!-- SPLASH -->
-<div id="splashScreen">
-  <div class="bg-dots">
-    <div class="dot dot1"></div>
-    <div class="dot dot2"></div>
-    <div class="dot dot3"></div>
+<div class="card">
+  <div class="logo-ring">
+    <img class="logo-img" id="logoImg"
+      src="logo.png"
+      onerror="this.style.display='none';document.getElementById('logoFb').style.display='flex';"
+      alt="RawaTech">
+    <div class="logo-fallback" id="logoFb">R</div>
   </div>
-  <div class="splash-content">
-
-    <!-- LOGO: Aapka actual logo image -->
-    <div class="logo-outer">
-      <img
-        class="logo-img"
-        src="https://raw.githubusercontent.com/Gajendra-rawat/rawatechapp/main/logo.png"
-        onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';"
-        alt="RawaTech Logo"
-      >
-      <!-- Fallback agar logo na aaye -->
-      <div id="logoFallback" style="display:none;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#1e3a8a,#1e90ff);align-items:center;justify-content:center;font-size:56px;font-weight:900;color:white;font-family:'Arial Black',sans-serif;">R</div>
-    </div>
-
-    <div class="brand-name">
-      <span class="brand-rawa">Rawa</span><span class="brand-tech">Tech</span>
-    </div>
-    <span class="brand-solutions">— Solutions —</span>
-
-    <div class="bar-wrap">
-      <div class="bar-bg"><div class="bar-fill" id="bar"></div></div>
-      <div class="bar-text" id="barText">Initializing...</div>
-    </div>
+  <div class="brand"><span class="rawa">Rawa</span><span class="tech">Tech</span></div>
+  <div class="solutions">— Solutions —</div>
+  <div class="progress-wrap">
+    <div class="progress-bg"><div class="progress-fill" id="pbar"></div></div>
+    <div class="progress-text" id="ptxt">Loading...</div>
   </div>
 </div>
 
-<!-- APP IFRAME -->
-<iframe
-  id="appFrame"
-  src=""
-  allow="camera;microphone;geolocation"
-  sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-top-navigation"
-></iframe>
-
-<!-- INSTALL BANNER -->
-<div id="installBanner">
-  <div class="bnr-row">
-    <div class="bnr-icon">📲</div>
-    <div class="bnr-info">
-      <div class="bnr-title">RawaTech Install Karein</div>
-      <div class="bnr-sub">Home screen pe add karein — bilkul native app!</div>
+<!-- PWA Install Banner -->
+<div id="pwaBar">
+  <div class="pwa-row">
+    <div class="pwa-icon">📲</div>
+    <div class="pwa-info">
+      <div class="pwa-title">RawaTech App Install Karein</div>
+      <div class="pwa-sub">Home screen pe add karein — bilkul native app!</div>
     </div>
-    <button class="bnr-btn" id="installBtn">INSTALL</button>
-    <button class="bnr-x" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+    <button class="pwa-install-btn" id="pwaBtn">INSTALL</button>
+    <button class="pwa-close" onclick="document.getElementById('pwaBar').style.display='none'">✕</button>
   </div>
 </div>
 
-<!-- iOS HINT -->
-<div id="iosHint">
-  <button class="ios-x" onclick="document.getElementById('iosHint').style.display='none'">✕</button>
-  <div class="ios-title">📲 iPhone Par Install Karein</div>
-  <div class="ios-step">1️⃣ Safari mein Share ⬆️ tap karein</div>
-  <div class="ios-step">2️⃣ "Add to Home Screen" select karein</div>
-  <div class="ios-step">3️⃣ "Add" tap karein — Done! ✅</div>
+<!-- iOS Hint -->
+<div id="iosBox">
+  <button class="ios-x" onclick="document.getElementById('iosBox').style.display='none'">✕</button>
+  <div class="ios-t">📲 iPhone Par Install Karein</div>
+  <div class="ios-s">1️⃣ Safari mein Share <b>⬆️</b> button tap karein</div>
+  <div class="ios-s">2️⃣ <b>"Add to Home Screen"</b> select karein</div>
+  <div class="ios-s">3️⃣ <b>"Add"</b> tap karein — Done! ✅</div>
 </div>
 
 <script>
   var APP_URL = "https://script.google.com/macros/s/AKfycbwbRnQJVKe_dD-04eij5lwDSXuvk_cllFJZ0crpkBPiAFkWg1-YrKJ7fp0MrqwjJ9G9gg/exec";
 
-  var bar=document.getElementById('bar');
-  var barText=document.getElementById('barText');
-  var splash=document.getElementById('splashScreen');
-  var frame=document.getElementById('appFrame');
+  var pbar = document.getElementById('pbar');
+  var ptxt = document.getElementById('ptxt');
 
-  var steps=[
-    {pct:25,text:"Connecting...",delay:300},
-    {pct:55,text:"Loading data...",delay:700},
-    {pct:85,text:"Almost ready...",delay:1200},
-    {pct:100,text:"Welcome! 🎉",delay:1700},
+  // Progress animation
+  var steps = [
+    {w:'20%', t:'Connecting...',   ms:200},
+    {w:'50%', t:'Loading data...', ms:600},
+    {w:'80%', t:'Almost ready...', ms:1100},
+    {w:'100%',t:'Welcome! 🎉',     ms:1600},
   ];
   steps.forEach(function(s){
-    setTimeout(function(){bar.style.width=s.pct+'%';barText.textContent=s.text;},s.delay);
+    setTimeout(function(){ pbar.style.width=s.w; ptxt.textContent=s.t; }, s.ms);
   });
 
+  // Redirect after splash
   setTimeout(function(){
-    frame.src=APP_URL;
-    frame.style.display='block';
-    splash.style.opacity='0';
-    setTimeout(function(){splash.style.display='none';},600);
-  },2200);
+    window.location.replace(APP_URL);
+  }, 2100);
 
-  setTimeout(function(){
-    var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
-    if(!standalone){
-      var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
-      if(!isIos&&deferredPrompt){
-        document.getElementById('installBanner').style.display='block';
+  // PWA Install prompt capture
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    // Banner 1 second baad dikhao
+    setTimeout(function(){
+      var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      if(!standalone){
+        document.getElementById('pwaBar').style.display = 'block';
       }
-    }
-  },3500);
-
-  var deferredPrompt=null;
-  window.addEventListener('beforeinstallprompt',function(e){
-    e.preventDefault();deferredPrompt=e;
+    }, 1000);
   });
-  document.getElementById('installBtn').addEventListener('click',function(){
+
+  document.getElementById('pwaBtn').addEventListener('click', function(){
     if(deferredPrompt){
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function(){
-        document.getElementById('installBanner').style.display='none';
+      deferredPrompt.userChoice.then(function(r){
+        document.getElementById('pwaBar').style.display='none';
         deferredPrompt=null;
+        if(r.outcome==='accepted'){
+          // Installed! Ab directly open karega
+          setTimeout(function(){ window.location.replace(APP_URL); }, 500);
+        }
       });
     }
   });
 
-  var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches;
-  if(isIos&&!isStandalone){
-    setTimeout(function(){document.getElementById('iosHint').style.display='block';},2800);
+  // iOS hint
+  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  if(isIos && !isStandalone){
+    setTimeout(function(){ document.getElementById('iosBox').style.display='block'; }, 1500);
   }
 
+  // Service Worker
   if('serviceWorker' in navigator){
-    window.addEventListener('load',function(){
+    window.addEventListener('load', function(){
       navigator.serviceWorker.register('sw.js').catch(function(){});
     });
   }
